@@ -14,7 +14,7 @@
       <% @matches.map do |match| %>
       <tr>
         <td><%= match.played_date %></td>
-        <td><%= match.oponent(current_user.id).email  %></td>
+        <td><%= match.opponent(current_user.id).email  %></td>
         <td><%= match.score(current_user.id)  %></td>
         <td><%= match.won(current_user.id) ? "W" : "L" %></td>
       </tr>

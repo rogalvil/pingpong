@@ -1,5 +1,31 @@
 <h1 class='page-header'>Leaderboard</h1>
 
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Raking</th>
+        <th>Email</th>
+        <th>Score</th>
+        <th>Games played</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.map.with_index do |user, i| %>
+      <tr>
+        <td><%= i + 1 %></td>
+        <td><%= user.email  %></td>
+        <td><%= user.rating  %></td>
+        <td><%= user.matches.length %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<!--
 <div class="alert alert-warning" role="alert">This is a sample page.</div>
 
 <%= image_tag('leaderboard.png') %>
+
+-->

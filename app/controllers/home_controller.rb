@@ -3,10 +3,11 @@ class HomeController < ApplicationController
   
 
   def index
+    @users = User.all.order(:rating).reverse
   end
 
   def history
-    @matches = Match.all
+    @matches = current_user.matches
   end
 
   def log

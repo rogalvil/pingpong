@@ -9,11 +9,13 @@ class Match < ActiveRecord::Base
   validate :scores_over_twenty_one_valid
   validate :scores_diference_two_points_valid
 
+  after_create :set_rating
+
   def me(user_id)
     users.me(user_id).first
   end
   
-  def oponent(user_id)
+  def opponent(user_id)
     users.not_me(user_id).first
   end
 
@@ -42,6 +44,35 @@ class Match < ActiveRecord::Base
   end
 
   private 
+
+    def set_rating
+      puts users
+      one = users.first
+      two = users.last
+      if User.all.order(:rating).pluck(:rating).uniq.first == 0
+        if won(one.id) 
+          one.rating += 1
+        else
+          two.rating += 1
+        end
+      else
+        if won(one.id) 
+          raking_w = User.all.order(:rating).pluck(:id).index(one.id)
+          raking_l = User.all.order(:rating).pluck(:id).index(two.id)
+          diff = (raking_w - raking_l)
+          one.rating += ((diff < 0) ? diff : 1 )
+          two.rating -= 1
+        else
+          raking_w = User.all.order(:rating).pluck(:id).index(two.id)
+          raking_l = User.all.order(:rating).pluck(:id).index(one.id)
+          two.rating += ((diff < 0) ? diff : 1 )
+          one.rating -= 1
+        end
+      end
+      one.save
+      two.save
+    end
+
     def scores_limit_valid
       unless scores.length == 2
         errors.add(:scores, "they must be only 2")
