@@ -6,6 +6,7 @@ class HomeController < ApplicationController
   end
 
   def history
+    @matches = Match.all
   end
 
   def log
@@ -19,7 +20,7 @@ class HomeController < ApplicationController
     @match = current_user.matches.new(params_match)
     if @match.save
       flash[:notice] = "Log game successfully created"
-      redirect_to root_path
+      redirect_to history_path
     else
       render 'log'
     end

@@ -9,6 +9,38 @@ class Match < ActiveRecord::Base
   validate :scores_over_twenty_one_valid
   validate :scores_diference_two_points_valid
 
+  def me(user_id)
+    users.me(user_id).first
+  end
+  
+  def oponent(user_id)
+    users.not_me(user_id).first
+  end
+
+  def score_me(user_id)
+    scores.me(user_id).first
+  end
+  
+  def score_oponent(user_id)
+    scores.not_me(user_id).first
+  end
+
+  def score(user_id)
+    if won(user_id)
+      "#{score_me(user_id).points}-#{score_oponent(user_id).points}"
+    else
+      "#{score_oponent(user_id).points}-#{score_me(user_id).points}"
+    end
+  end
+
+  def won(user_id)
+    (score_me(user_id).points > score_oponent(user_id).points)
+  end
+
+  def played_date
+    played_at.strftime("%b %m")
+  end
+
   private 
     def scores_limit_valid
       unless scores.length == 2

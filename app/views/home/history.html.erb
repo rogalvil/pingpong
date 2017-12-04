@@ -1,5 +1,31 @@
 <h1 class='page-header'>History</h1>
 
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Oponent</th>
+        <th>Score</th>
+        <th>Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @matches.map do |match| %>
+      <tr>
+        <td><%= match.played_date %></td>
+        <td><%= match.oponent(current_user.id).email  %></td>
+        <td><%= match.score(current_user.id)  %></td>
+        <td><%= match.won(current_user.id) ? "W" : "L" %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- 
 <div class="alert alert-warning" role="alert">This is a sample page. Replace link in the header with your own.</div>
 
 <%= image_tag('history.png') %>
+-->
