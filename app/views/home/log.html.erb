@@ -1,5 +1,62 @@
 <h1 class='page-header'>Log Game</h1>
 
+<% if @match.errors.any? %>
+  <div class="alert alert-icon alert-dismissible alert-danger" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+    <strong>You have <%= pluralize(@match.errors.count, "error") %></strong> 
+    <ul>
+      <% @match.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %> 
+<div class="col-md-12">
+  <%= form_for(@match, url: log_path) do |f| %>
+    <% if @match.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@match.errors.count, "error") %> prohibited this match from being saved:</h2>
+
+        <ul>
+        <% @match.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :played_at %>
+      <%= f.date_field :played_at, class: "form-control" %>
+    </div>
+
+    <div class="field">
+      
+      
+      <%= f.fields_for :scores do |s| %>
+        <% if s.object.user == current_user %>
+          <%= s.label :user_id, "User" %>
+          <%= s.hidden_field :user_id, class: "form-control" %>  
+          <%= s.label :user_id, "Your score" %>
+          <%= s.text_field :points, class: "form-control" %>
+        <% else %>
+          <%= s.label :user_id, "Opponent" %>
+
+          <%= s.collection_select(:user_id, @opponents, :id, :email, {}, class: "form-control") %>
+
+
+          <%= s.label :user_id, "Their score" %>
+          <%= s.text_field :points, class: "form-control" %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+  <% end %>
+
 <div class="alert alert-warning" role="alert">This is a sample page. Replace link in the header with your own.</div>
 
 <%= image_tag('log_game.png') %>
